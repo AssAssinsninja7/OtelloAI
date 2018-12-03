@@ -10,9 +10,8 @@ namespace Otello
 {
     class HumanPlayer : Player
     {
-        MouseState mouseState, oldMouseState;
-        int mouseX, posY;
-        bool tempOutBool;
+        private MouseState mouseState, oldMouseState;
+        private bool justClicked;
 
         public HumanPlayer(GraphPlayingfield playingField)
         {
@@ -37,17 +36,8 @@ namespace Otello
 
         public override void Update()
         {
-            mouseState = Mouse.GetState();
-            mouseX = mouseState.X;
-            posY = mouseState.Y;
-
-            if (mouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released)
-            {
-                tempOutBool = playingField.PlaceTile(mouseX, posY, myColor);
-                System.Console.WriteLine(tempOutBool); //debug, remove later maybe switch so the method doesn't return a bool
-            }
-            oldMouseState = mouseState;
-        }
+           
+        }     
 
         /// <summary>
         /// returns the individual nodes color
@@ -56,6 +46,34 @@ namespace Otello
         public override Color GetColor()
         {
             return myColor;
+        }
+
+        /// <summary>
+        /// Allows the GameManager to get the position that has been clicked by the player
+        /// </summary>
+        /// <returns></returns>
+        public override Vector2 GetMove()
+        {
+            return new Vector2(posX, posY);
+        }
+
+        /// <summary>
+        /// Gets the input made by the user, sets the position and then returns if it was clicked or nah so the 
+        /// GameManager can use More efficently (Only call getmove if justclicked is true)
+        /// </summary>
+        public bool SetMouseInput()
+        {
+            mouseState = Mouse.GetState();
+            posX = mouseState.X;
+            posY = mouseState.Y;
+            justClicked = false;
+
+            if (mouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton == ButtonState.Released)
+            {
+                justClicked = true;
+            }
+            oldMouseState = mouseState;
+            return justClicked;
         }
     }
 }

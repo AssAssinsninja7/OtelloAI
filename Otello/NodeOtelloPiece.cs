@@ -11,7 +11,7 @@ namespace Otello
     class NodeOtelloPiece
     {
         public Queue<NodeOtelloPiece> Neighbors { get; private set; }
-        public bool EmptyTile { get; set; }
+        public bool isEmptyTile { get; set; }
         public Rectangle MyHitbox { get; set; }
         public Texture2D OtelloTileTex { get; set; }
         public Color nodeColor { get; set; }
@@ -24,7 +24,7 @@ namespace Otello
             Neighbors = new Queue<NodeOtelloPiece>();
             this.position = pos;
             this.OtelloTileTex = tex;
-            EmptyTile = true;
+            isEmptyTile = true;
 
         }
 

@@ -11,10 +11,12 @@ namespace Otello
         SpriteBatch spriteBatch;
         Texture2D otelloPieceTex;
         Texture2D lineTex;
-
         LineDrawer lineDrawer;
+
         GraphPlayingfield playingField;
-        //Player player;
+        GameManager gameManager;
+
+        //players
         Agent agentMinMax;
         HumanPlayer hPlayer;
 
@@ -69,6 +71,8 @@ namespace Otello
 
             agentMinMax = new Agent(playingField);
             hPlayer = new HumanPlayer(playingField);
+
+            gameManager = new GameManager(playingField, hPlayer, agentMinMax);
 
            
         }
@@ -127,8 +131,9 @@ namespace Otello
                     }
                     break;
                 case GameState.GamePlay:
-                    playingField.StartGame();
-                    hPlayer.Update();
+                    gameManager.StartGame();
+
+                    gameManager.Update();
                  
                     break;
                 case GameState.GameOver:
@@ -154,7 +159,7 @@ namespace Otello
                     spriteBatch.Draw(otelloPieceTex, blackButtonRect, Color.Black);
                     break;
                 case GameState.GamePlay:
-                    playingField.Draw(spriteBatch);
+                    gameManager.Draw(spriteBatch);
                     lineDrawer.DrawGrid(spriteBatch);
                     GraphicsDevice.Clear(Color.Green);
                     break;

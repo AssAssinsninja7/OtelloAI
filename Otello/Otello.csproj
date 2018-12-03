@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Agent.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GameManager.cs" />
     <Compile Include="GraphPlayingfield.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="LineDrawer.cs" />
