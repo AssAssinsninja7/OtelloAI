@@ -37,7 +37,7 @@ namespace Otello
 
         public void StartGame()
         {
-            playingfield.Start();
+            
         }
 
         public void Draw(SpriteBatch sb)

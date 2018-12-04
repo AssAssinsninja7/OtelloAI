@@ -65,6 +65,7 @@ namespace Otello
             blackButtonRect = new Rectangle(Window.ClientBounds.Width / 2 , Window.ClientBounds.Height / 2, otelloPieceTex.Width, otelloPieceTex.Height);
 
             playingField = new GraphPlayingfield(otelloPieceTex);
+            playingField.PlaceStartPositios();
 
             lineTex = new Texture2D(graphics.GraphicsDevice, 1, 1);
             lineDrawer = new LineDrawer(lineTex);
@@ -131,7 +132,7 @@ namespace Otello
                     }
                     break;
                 case GameState.GamePlay:
-                    gameManager.StartGame();
+                    //gameManager.StartGame(true);
 
                     gameManager.Update();
                  

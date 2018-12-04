@@ -29,6 +29,8 @@ namespace Otello
         private bool rightChecked, downChecked;
         NodeOtelloPiece startNode;
 
+        bool tempFlag = true;
+
         public GraphPlayingfield(Texture2D otelloTileTex)
         {
             this.otelloTileTex = otelloTileTex;
@@ -84,7 +86,7 @@ namespace Otello
                     {
                         graph[x, y].isEmptyTile = false;                      
                         graph[x, y].nodeColor = playerColor;
-                        startNode = graph[x, y];
+                        startNode = graph[x, y]; // is the node that 
                         Flip(x, y); //I dont need the color since the one I'm checking will have the right one
                     }                  
                 }
@@ -166,15 +168,10 @@ namespace Otello
             }
         }
 
-        ///// <summary>
-        ///// Preps upp the starting tiles for the game 
-        ///// </summary>
-        public void Start()
-        {
-            PlaceStartPositios();
-        }
-
-        private void PlaceStartPositios()
+        /// <summary>
+        /// Places the staring tiles for each team
+        /// </summary>
+        public void PlaceStartPositios()
         {
             for (int i = 0; i < startingPositions.Capacity; i++)
             {
@@ -192,7 +189,7 @@ namespace Otello
          
         }
 
-        //Borked
+        //Works for x & y axis but not the tilted ones (bottom left corner to upper right corner)
         private void Flip(int x, int y)
         {
             upperNeighbor = y - 1;
@@ -201,58 +198,76 @@ namespace Otello
             lowerNeighbor = y + 1;
 
             
+            X_AxelFlip(rightNeighbor, y, true);
+            X_AxelFlip(leftNeighbor, y, false);
+            Y_AxelFlip(x, lowerNeighbor, true);
+            Y_AxelFlip(x, upperNeighbor, false);
 
-            if (rightNeighbor >= 0 && startNode.nodeColor != graph[x, rightNeighbor].nodeColor) //if(not outside, and not same team)
-            {
-                //X_AxelFlip(x, y, true);
-
-                RightFlip(x, y);
-
-
-                //allNodeFlipQueues[allNodeFlipQueues.Count() + 1] = currentFlipQueue; 
-            }
-          
+            FlipColor();                  
         }
 
-        private void OrthagonalFlipCheck(int x, int y)
-        {
-           
+       /// <summary>
+       /// Goes through the grid and flips all the valid tiles in the queue 
+       /// currentFlipQueue and then removes it. 
+       /// </summary>
+       private void FlipColor()
+       {
+            for (int y = 0; y < gridLength; y++)
+            {
+                for (int x = 0; x < gridLength; x++)
+                {
+                    if (currentFlipQueue.Count > 0 && currentFlipQueue.Peek() == graph[x, y])
+                    {
+                        currentFlipQueue.Dequeue();
+                        graph[x, y].nodeColor = startNode.nodeColor;
+                    }
+                }
+            }
+
         }
 
         /// <summary>
         /// Checks if there's any tiles that can be flipped based on the placement of the 
         /// players tile.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">Horizontal Axis in the graph</param>
+        /// <param name="y">Vertical Axis in the graph</param>
         /// <param name="isRight"></param>
         private void X_AxelFlip(int x, int y, bool isRight)
         {
-            if (isRight && !rightChecked) //have i chekced the whole right side or nah?
+            if (isRight) //have i chekced the whole right side or nah?
             {
-                if (!graph[rightNeighbor, y].isEmptyTile) // if this pos is not empty
+                if (!graph[x, y].isEmptyTile && graph[x, y].nodeColor != startNode.nodeColor) // if this pos is not empty
                 {
-                    currentFlipQueue.Enqueue(graph[rightNeighbor, y]);
-                    X_AxelFlip(rightNeighbor, y, true);
+                    currentFlipQueue.Enqueue(graph[x, y]);
+                    if (x + 1 < gridLength)
+                    {
+                        x++;
+                        X_AxelFlip(x, y, true);
+                    }
                 }
-                else if(graph[rightNeighbor, y].isEmptyTile && currentFlipQueue.Count > 0)
-                {
-                    amountOfPoints += currentFlipQueue.Count;
-                    rightChecked = true;
+                else if(!graph[x, y].isEmptyTile && currentFlipQueue.Count > 0) //not sure if rright check the others as well
+                {             
+                    amountOfPoints += currentFlipQueue.Count;                                    
                 }
             }
+
             else
             {
-                if (!graph[leftNeighbor, y].isEmptyTile)
+                if (!graph[x, y].isEmptyTile && graph[x,y].nodeColor != startNode.nodeColor)
                 {
-                    currentFlipQueue.Enqueue(graph[leftNeighbor, y]);
-                    X_AxelFlip(leftNeighbor, y, false);
+                    currentFlipQueue.Enqueue(graph[x, y]);
+                    if (x - 1 > 0)
+                    {
+                        x--; ;
+                        X_AxelFlip(x, y, false);
+                    }                
+                    
                 }
-                else if (graph[leftNeighbor, y].isEmptyTile && currentFlipQueue.Count > 0)
+                else if (!graph[x, y].isEmptyTile && currentFlipQueue.Count > 0)
                 {
                     amountOfPoints += currentFlipQueue.Count;
                 }
-                rightChecked = false;
             }
         }
 
@@ -260,24 +275,33 @@ namespace Otello
         {
             if (isDown)
             {
-                if (!graph[x, lowerNeighbor].isEmptyTile) //Down
+                if (!graph[x, y].isEmptyTile && graph[x, y].nodeColor != startNode.nodeColor) //Down
                 {
-                    currentFlipQueue.Enqueue(graph[x, upperNeighbor]);
-                    Y_AxelFlip(x, lowerNeighbor, true);
+                    currentFlipQueue.Enqueue(graph[x, y]);
+                    if (y + 1 < gridLength)
+                    {
+                        y++;
+                        Y_AxelFlip(x, y, true);
+                    }       
                 }
-                else if (graph[x, lowerNeighbor].isEmptyTile && currentFlipQueue.Count > 0)
+                else if (!graph[x, y].isEmptyTile && currentFlipQueue.Count > 0)
                 {
                     amountOfPoints += currentFlipQueue.Count;
                 }
             }
             else
             {
-                if (!graph[x, upperNeighbor].isEmptyTile) //UP
+                if (!graph[x, y].isEmptyTile && graph[x,y].nodeColor != startNode.nodeColor) //UP
                 {
-                    currentFlipQueue.Enqueue(graph[x, upperNeighbor]);
-                    Y_AxelFlip(x, upperNeighbor, false);
+                    currentFlipQueue.Enqueue(graph[x, y]);
+                    if (y - 1 > 0)
+                    {
+                        y--;
+                        Y_AxelFlip(x, y, false);
+                    }
+                  
                 }
-                else if (graph[x, upperNeighbor].isEmptyTile && currentFlipQueue.Count > 0)
+                else if (!graph[x, y].isEmptyTile && currentFlipQueue.Count > 0)
                 {
                     amountOfPoints += currentFlipQueue.Count;
                 }
@@ -285,22 +309,22 @@ namespace Otello
         }
 
         private void RightFlip(int x, int y)
-        {
-        
-                if (graph[rightNeighbor, y].isEmptyTile) // if this pos is not empty
+        {           
+            if (!graph[x, y].isEmptyTile && graph[x,y].nodeColor != startNode.nodeColor) // if this pos is not empty
+            {
+                currentFlipQueue.Enqueue(graph[x, y]);
+                if (x + 1 < gridLength)
                 {
-                    currentFlipQueue.Enqueue(graph[rightNeighbor, y]);
-
-                if (rightNeighbor + 1 < gridLength)       //funkar inte måste se till att den stoppar vid else if när den väl inte hittar fler         
-                    rightNeighbor += 1;
-              
-                    RightFlip(rightNeighbor, y);
-                }
-
-                else if (graph[rightNeighbor, y].nodeColor == startNode.nodeColor && currentFlipQueue.Count > 0 )
-                {
-                    amountOfPoints += currentFlipQueue.Count;
-                }           
+                    x += 1;
+                    RightFlip(x, y);
+                }   
+                
+               if (graph[rightNeighbor, y].nodeColor == startNode.nodeColor && currentFlipQueue.Count > 0 )
+               {
+                   amountOfPoints += currentFlipQueue.Count;
+               }
+            }
+                tempFlag = true;
         }
 
 
