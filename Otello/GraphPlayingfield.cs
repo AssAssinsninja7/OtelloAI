@@ -226,14 +226,14 @@ namespace Otello
 
         }
 
-        /// <summary>
+       /// <summary>
         /// Checks if there's any tiles that can be flipped based on the placement of the 
         /// players tile.
         /// </summary>
         /// <param name="x">Horizontal Axis in the graph</param>
         /// <param name="y">Vertical Axis in the graph</param>
         /// <param name="isRight"></param>
-        private void X_AxelFlip(int x, int y, bool isRight)
+       private void X_AxelFlip(int x, int y, bool isRight)
         {
             if (isRight) //have i chekced the whole right side or nah?
             {
@@ -271,7 +271,7 @@ namespace Otello
             }
         }
 
-        private void Y_AxelFlip(int x, int y, bool isDown)
+       private void Y_AxelFlip(int x, int y, bool isDown)
         {
             if (isDown)
             {
@@ -308,7 +308,7 @@ namespace Otello
             }
         }
 
-        private void RightFlip(int x, int y)
+       private void RightFlip(int x, int y)
         {           
             if (!graph[x, y].isEmptyTile && graph[x,y].nodeColor != startNode.nodeColor) // if this pos is not empty
             {
@@ -327,22 +327,15 @@ namespace Otello
                 tempFlag = true;
         }
 
-
-        /// <summary>
+       /// <summary>
         /// Returns the points 
         /// </summary>
         /// <returns></returns>
-        public int GetPoints()
+       public int GetPoints()
         {
             int finalPoints = amountOfPoints;
             amountOfPoints = 0;
             return finalPoints;
-        }
-
-        private void NonOrthagonalFlipCheck()
-        {
-
-        }
-    
+        } 
     }
 }

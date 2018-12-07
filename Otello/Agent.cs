@@ -9,10 +9,15 @@ namespace Otello
 {
     class Agent : Player
     {
+        private int maxEval, minEval;
+        private NodeOtelloPiece evalNode, maxEvalNode;
+
 
         public Agent(GraphPlayingfield playingField)
         {
             this.playingField = playingField;
+            maxEval = 1000;
+            minEval = -1000;
         }
 
         public override void Update()
@@ -39,6 +44,26 @@ namespace Otello
         public override Color GetColor()
         {
             return myColor;
+        }
+
+        private NodeOtelloPiece MiniMax(NodeOtelloPiece node, int depth, bool isAgent)
+        {
+            if (depth == 0)
+                return node;
+
+            if (isAgent)
+            {
+                foreach (var neighbor in node.Neighbors)
+                {
+                    if(neighbor != null)
+                    {
+                        evalNode = MiniMax(neighbor, depth - 1, false);
+                        // maxEvalNode = best flipps between this maxEvalNode compared to evalNode (måste ända ta ut bästa flipriktningen för denna noden)
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
