@@ -9,7 +9,7 @@ namespace Otello
 {
     class Agent : Player
     {
-        private int maxEval, minEval;
+        private int maxEval = 1000, minEval = -1000;
         private NodeOtelloPiece evalNode, maxEvalNode;
 
 
@@ -29,7 +29,7 @@ namespace Otello
         /// Assigns the color based on the players choice.
         /// </summary>
         /// <param name="starting"></param>
-        public override void AssignStarter(bool starting) 
+        public override void AssignStarter(bool starting)
         {
             if (starting)
             {
@@ -53,12 +53,26 @@ namespace Otello
 
             if (isAgent)
             {
+                int best = minEval;
                 foreach (var neighbor in node.Neighbors)
                 {
-                    if(neighbor != null)
+                    if (neighbor != null)
                     {
                         evalNode = MiniMax(neighbor, depth - 1, false);
                         // maxEvalNode = best flipps between this maxEvalNode compared to evalNode (måste ända ta ut bästa flipriktningen för denna noden)
+                    }
+                }
+            }
+
+            else
+            {
+                foreach (var neighbor in node.Neighbors)
+                {
+                    int best = maxEval;
+                    if (neighbor != null)
+                    {
+                        evalNode = MiniMax(neighbor, depth - 1, true);
+                      
                     }
                 }
             }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/heliu/source/repos/Otello/Otello/Content/OtelloTile.png</SourceFile>
-  <SourceTime>2018-11-20T15:03:10.7417087+01:00</SourceTime>
-  <DestFile>C:/Users/heliu/source/repos/Otello/Otello/Content/bin/Windows/OtelloTile.xnb</DestFile>
-  <DestTime>2018-11-20T15:37:43.231989+01:00</DestTime>
+  <SourceFile>C:/Users/Hampus/Documents/GitHub/OtelloAI/Otello/Content/OtelloTile.png</SourceFile>
+  <SourceTime>2018-12-06T13:02:07.8494415+01:00</SourceTime>
+  <DestFile>C:/Users/Hampus/Documents/GitHub/OtelloAI/Otello/Content/bin/Windows/OtelloTile.xnb</DestFile>
+  <DestTime>2018-12-08T14:40:31.3271197+01:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2018-09-23T23:55:52+02:00</ImporterTime>
+  <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2018-09-23T23:55:52+02:00</ProcessorTime>
+  <ProcessorTime>2016-03-30T08:36:08+02:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

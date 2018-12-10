@@ -4,11 +4,7 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/heliu/source/repos/Otello/Otello/Content/1x1px.png</File>
-    <File>C:/Users/heliu/source/repos/Otello/Otello/Content/OtelloTile.png</File>
+    <File>C:/Users/Hampus/Documents/GitHub/OtelloAI/Otello/Content/1x1px.png</File>
+    <File>C:/Users/Hampus/Documents/GitHub/OtelloAI/Otello/Content/OtelloTile.png</File>
   </SourceFiles>
-  <DestFiles>
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
-  </DestFiles>
 </SourceFileCollection>
