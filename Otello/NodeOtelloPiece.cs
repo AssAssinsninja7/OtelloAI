@@ -15,17 +15,17 @@ namespace Otello
         public Rectangle MyHitbox { get; set; }
         public Texture2D OtelloTileTex { get; set; }
         public Color NodeColor { get; set; }
-        Vector2 position;
+        public Vector2 Position { get; set; }
 
-       
+       public int FlipScore { get; set; }
 
         public NodeOtelloPiece(Vector2 pos, Texture2D tex)
         {
             Neighbors = new Queue<NodeOtelloPiece>();
-            this.position = pos;
+            this.Position = pos;
             this.OtelloTileTex = tex;
             EmptyTile = true;
-
+            FlipScore = 0;
         }
 
         public void AddNehigbors(NodeOtelloPiece node) //ta in min pos hitta grannar
