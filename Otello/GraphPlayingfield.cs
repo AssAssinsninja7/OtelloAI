@@ -27,9 +27,7 @@ namespace Otello
         private int lowerNeighbor;
 
         private bool rightChecked, downChecked;
-        NodeOtelloPiece startNode;
-
-        bool tempFlag = true;
+        NodeOtelloPiece startNode;   
 
         public GraphPlayingfield(Texture2D otelloTileTex)
         {
@@ -48,9 +46,7 @@ namespace Otello
 
             currentFlipQueue = new Queue<NodeOtelloPiece>();
             //biggestFlipQueue = new Queue<NodeOtelloPiece>();
-            allNodeFlipQueues = new Queue<NodeOtelloPiece>[gridLength];
-
-         
+            allNodeFlipQueues = new Queue<NodeOtelloPiece>[gridLength];    
         }
 
         /// <summary>
@@ -82,10 +78,10 @@ namespace Otello
             {
                 for (int x = 0; x < gridLength; x++)
                 {
-                    if (graph[x,y].MyHitbox.Contains(posX, posY) && graph[x, y].isEmptyTile) //where i have clicked is empty, is k to place
+                    if (graph[x,y].MyHitbox.Contains(posX, posY) && graph[x, y].EmptyTile) //where i have clicked is empty, is k to place
                     {
-                        graph[x, y].isEmptyTile = false;                      
-                        graph[x, y].nodeColor = playerColor;
+                        graph[x, y].EmptyTile = false;                      
+                        graph[x, y].NodeColor = playerColor;
                         startNode = graph[x, y]; // is the node that 
                         Flip(x, y); //I dont need the color since the one I'm checking will have the right one
                     }                  
@@ -93,8 +89,6 @@ namespace Otello
             }
 
         }     
-
-
 
         /// <summary>
         /// Draws the otello tiles that have been placed on the board
@@ -106,9 +100,9 @@ namespace Otello
             {
                 for (int x = 0; x < gridLength; x++)
                 {
-                    if (graph[x,y].isEmptyTile == false) //if it's not empty, DRAW
+                    if (graph[x,y].EmptyTile == false) //if it's not empty, DRAW
                     {
-                        spriteBatch.Draw(graph[x,y].OtelloTileTex, graph[x, y].MyHitbox, graph[x,y].nodeColor); //smått reee att jag skickar texutren via klassen till noden så att jag sen kan hämta den igen c:
+                        spriteBatch.Draw(graph[x,y].OtelloTileTex, graph[x, y].MyHitbox, graph[x,y].NodeColor); //smått reee att jag skickar texutren via klassen till noden så att jag sen kan hämta den igen c:
                     }
                 }
             }
@@ -178,13 +172,13 @@ namespace Otello
                 if (i == 1 || i == 2)
                 {
                  
-                    graph[(int)startingPositions[i].X, (int)startingPositions[i].Y].nodeColor = Color.Black;
+                    graph[(int)startingPositions[i].X, (int)startingPositions[i].Y].NodeColor = Color.Black;
                 }
                 else
                 {
-                    graph[(int)startingPositions[i].X, (int)startingPositions[i].Y].nodeColor = Color.White;
+                    graph[(int)startingPositions[i].X, (int)startingPositions[i].Y].NodeColor = Color.White;
                 }
-                graph[(int)startingPositions[i].X, (int)startingPositions[i].Y].isEmptyTile = false;
+                graph[(int)startingPositions[i].X, (int)startingPositions[i].Y].EmptyTile = false;
             }
          
         }
@@ -219,7 +213,7 @@ namespace Otello
                     if (currentFlipQueue.Count > 0 && currentFlipQueue.Peek() == graph[x, y])
                     {
                         currentFlipQueue.Dequeue();
-                        graph[x, y].nodeColor = startNode.nodeColor;
+                        graph[x, y].NodeColor = startNode.NodeColor;
                     }
                 }
             }
@@ -237,7 +231,7 @@ namespace Otello
         {
             if (isRight) //have i chekced the whole right side or nah?
             {
-                if (!graph[x, y].isEmptyTile && graph[x, y].nodeColor != startNode.nodeColor) // if this pos is not empty
+                if (!graph[x, y].EmptyTile && graph[x, y].NodeColor != startNode.NodeColor) // if this pos is not empty
                 {
                     currentFlipQueue.Enqueue(graph[x, y]);
                     if (x + 1 < gridLength)
@@ -246,7 +240,7 @@ namespace Otello
                         X_AxelFlip(x, y, true);
                     }
                 }
-                else if(!graph[x, y].isEmptyTile && currentFlipQueue.Count > 0) //not sure if rright check the others as well
+                else if(!graph[x, y].EmptyTile && currentFlipQueue.Count > 0) //not sure if rright check the others as well
                 {             
                     amountOfPoints += currentFlipQueue.Count;                                    
                 }
@@ -254,7 +248,7 @@ namespace Otello
 
             else
             {
-                if (!graph[x, y].isEmptyTile && graph[x,y].nodeColor != startNode.nodeColor)
+                if (!graph[x, y].EmptyTile && graph[x,y].NodeColor != startNode.NodeColor)
                 {
                     currentFlipQueue.Enqueue(graph[x, y]);
                     if (x - 1 > 0)
@@ -264,7 +258,7 @@ namespace Otello
                     }                
                     
                 }
-                else if (!graph[x, y].isEmptyTile && currentFlipQueue.Count > 0)
+                else if (!graph[x, y].EmptyTile && currentFlipQueue.Count > 0)
                 {
                     amountOfPoints += currentFlipQueue.Count;
                 }
@@ -275,7 +269,7 @@ namespace Otello
         {
             if (isDown)
             {
-                if (!graph[x, y].isEmptyTile && graph[x, y].nodeColor != startNode.nodeColor) //Down
+                if (!graph[x, y].EmptyTile && graph[x, y].NodeColor != startNode.NodeColor) //Down
                 {
                     currentFlipQueue.Enqueue(graph[x, y]);
                     if (y + 1 < gridLength)
@@ -284,14 +278,14 @@ namespace Otello
                         Y_AxelFlip(x, y, true);
                     }       
                 }
-                else if (!graph[x, y].isEmptyTile && currentFlipQueue.Count > 0)
+                else if (!graph[x, y].EmptyTile && currentFlipQueue.Count > 0)
                 {
                     amountOfPoints += currentFlipQueue.Count;
                 }
             }
             else
             {
-                if (!graph[x, y].isEmptyTile && graph[x,y].nodeColor != startNode.nodeColor) //UP
+                if (!graph[x, y].EmptyTile && graph[x,y].NodeColor != startNode.NodeColor) //UP
                 {
                     currentFlipQueue.Enqueue(graph[x, y]);
                     if (y - 1 > 0)
@@ -301,31 +295,12 @@ namespace Otello
                     }
                   
                 }
-                else if (!graph[x, y].isEmptyTile && currentFlipQueue.Count > 0)
+                else if (!graph[x, y].EmptyTile && currentFlipQueue.Count > 0)
                 {
                     amountOfPoints += currentFlipQueue.Count;
                 }
             }
-        }
-
-       private void RightFlip(int x, int y)
-        {           
-            if (!graph[x, y].isEmptyTile && graph[x,y].nodeColor != startNode.nodeColor) // if this pos is not empty
-            {
-                currentFlipQueue.Enqueue(graph[x, y]);
-                if (x + 1 < gridLength)
-                {
-                    x += 1;
-                    RightFlip(x, y);
-                }   
-                
-               if (graph[rightNeighbor, y].nodeColor == startNode.nodeColor && currentFlipQueue.Count > 0 )
-               {
-                   amountOfPoints += currentFlipQueue.Count;
-               }
-            }
-                tempFlag = true;
-        }
+        }     
 
        /// <summary>
         /// Returns the points 
@@ -337,5 +312,29 @@ namespace Otello
             amountOfPoints = 0;
             return finalPoints;
         } 
+
+        /// <summary>
+        /// Goes through the whole graph/ playingfield and finds placeable positions which has a neighbor next to the opponents color. 
+        /// </summary>
+        /// <returns></returns>
+       public NodeOtelloPiece[] GetEmptyTiles()
+       {
+            List<NodeOtelloPiece> returnNodes = new List<NodeOtelloPiece>();
+            for (int y = 0; y < gridLength; y++)
+            {
+                for (int x = 0; x < gridLength; x++)
+                {
+                    if (graph[x ,y].EmptyTile)
+                    {
+                        //graph[x, y]. //om denna har grannar som inte har samma färg gör rekursiv kall på grannen tills det inte går eller en tom plats hittats
+                        if (graph[x, y].HasValidNeighbor())
+                        {
+                            returnNodes.Add(graph[x, y]);
+                        }                    
+                    }
+                }
+            }
+            return returnNodes.ToArray();
+       }
     }
 }

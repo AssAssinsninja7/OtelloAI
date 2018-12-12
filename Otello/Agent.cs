@@ -11,6 +11,7 @@ namespace Otello
     {
         private int maxEval, minEval;
         private NodeOtelloPiece evalNode, maxEvalNode;
+        private NodeOtelloPiece[] placeableNodes;
 
 
         public Agent(GraphPlayingfield playingField)
@@ -46,8 +47,19 @@ namespace Otello
             return myColor;
         }
 
+       
+        public void SetPlaceables()
+        {
+           placeableNodes = playingField.GetEmptyTiles();
+
+            
+        }
+
+
+
         private NodeOtelloPiece MiniMax(NodeOtelloPiece node, int depth, bool isAgent)
         {
+
             if (depth == 0)
                 return node;
 
