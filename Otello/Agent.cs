@@ -17,8 +17,8 @@ namespace Otello
         public Agent(GraphPlayingfield playingField)
         {
             this.playingField = playingField;
-            maxEval = 1000;
-            minEval = -1000;
+            maxEval = -1000;
+            minEval = 1000;
         }
 
         public override void Update()
@@ -87,12 +87,49 @@ namespace Otello
                     if(neighbor != null)
                     {
                         evalNode = MiniMax(neighbor, depth - 1, false);
-                        // maxEvalNode = best flipps between this maxEvalNode compared to evalNode (måste ända ta ut bästa flipriktningen för denna noden)
+                        maxEval = Max(maxEval, evalNode.FlipScore);
+
+                        for (int i = 0; i < node.Neighbors.Count; i++)
+                        {
+                            if (node.Neighbors.ToArray()[i].FlipScore == maxEval)
+                            {
+                               //behöver reurnera värdet som fick högst poäng men är helt slut i huvet och det blir bara mer och mer grötig kod #helpMe ;_;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var neigbor in node.Neighbors)
+                {
+                    if (neigbor!= null)
+                    {
+                        evalNode = MiniMax(neigbor, depth - 1, true);
+                        minEval = Min(minEval, -evalNode.FlipScore);
                     }
                 }
             }
 
             return null;
+        }
+
+        private int Max(int maxEval,int eval)
+        {
+            if (maxEval > eval)
+            {
+                return maxEval;
+            }
+            return eval;
+        }
+
+        private int Min(int minEval, int eval)
+        {
+            if (minEval < eval)
+            {
+                return minEval;
+            }
+            return eval;
         }
     }
 }
