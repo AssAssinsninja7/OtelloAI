@@ -45,7 +45,7 @@ namespace Otello
         public override Color GetColor()
         {
             return myColor;
-        }      
+        }
 
         //private void SetHighestFlipValue(NodeOtelloPiece[] placeableNodes) //skica
         //{
@@ -71,7 +71,7 @@ namespace Otello
         //            }
         //        }
         //    }
-           
+
         //}
 
         private NodeOtelloPiece MiniMax(NodeOtelloPiece node, int depth, bool isAgent)
@@ -94,23 +94,25 @@ namespace Otello
                         {
                             if (node.Neighbors.ToArray()[i].FlipScore == maxEval)
                             {
-                               //behöver reurnera värdet som fick högst poäng men är helt slut i huvet och det blir bara mer och mer grötig kod #helpMe ;_;
+                                //behöver reurnera värdet som fick högst poäng men är helt slut i huvet och det blir bara mer och mer grötig kod #helpMe ;_;
                             }
                         }
                     }
                 }
             }
-            else
+
+            else if(!isAgent)
             {
                 foreach (var neigbor in node.Neighbors)
                 {
-                    if (neigbor!= null)
+                    if (neigbor != null)
                     {
                         evalNode = MiniMax(neigbor, depth - 1, true);
                         minEval = Min(minEval, -evalNode.FlipScore);
                     }
                 }
-            }
+            } 
+            
 
             else
             {
@@ -128,6 +130,13 @@ namespace Otello
             return null;
         }
 
+
+        /// <summary>
+        /// Returns the highest value of the two
+        /// </summary>
+        /// <param name="maxEval">Worst scenario val for the agent</param>
+        /// <param name="eval">current value being compared</param>
+        /// <returns></returns>
         private int Max(int maxEval,int eval)
         {
             if (maxEval > eval)
@@ -137,6 +146,12 @@ namespace Otello
             return eval;
         }
 
+        /// <summary>
+        /// Returns the lowest value of the two
+        /// </summary>
+        /// <param name="minEval">Worst scenario val for player</param>
+        /// <param name="eval">current value being compared</param>
+        /// <returns></returns>
         private int Min(int minEval, int eval)
         {
             if (minEval < eval)
