@@ -49,7 +49,7 @@ namespace Otello
         }
 
         /// <summary>
-        /// Allows the GameManager to get the position that has been clicked by the player
+        /// Allows the GameManager to get the Position that has been clicked by the player
         /// </summary>
         /// <returns></returns>
         public override Vector2 GetMove()
@@ -58,7 +58,7 @@ namespace Otello
         }
 
         /// <summary>
-        /// Gets the input made by the user, sets the position and then returns if it was clicked or nah so the 
+        /// Gets the input made by the user, sets the Position and then returns if it was clicked or nah so the 
         /// GameManager can use More efficently (Only call getmove if justclicked is true)
         /// </summary>
         public bool SetMouseInput()

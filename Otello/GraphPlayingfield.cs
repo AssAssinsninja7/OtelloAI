@@ -14,7 +14,7 @@ namespace Otello
         private List<Vector2> startingPositions;
         private Queue<NodeOtelloPiece> currentFlipQueue;
         //private Queue<NodeOtelloPiece> biggestFlipQueue;
-        private Queue<NodeOtelloPiece>[] allNodeFlipQueues;
+        //private Queue<NodeOtelloPiece>[] allNodeFlipQueues;
 
         int amountOfPoints = 0;
 
@@ -27,7 +27,10 @@ namespace Otello
         private int lowerNeighbor;
 
         private bool rightChecked, downChecked;
-        NodeOtelloPiece startNode;   
+        NodeOtelloPiece startNode;
+
+        List<NodeOtelloPiece> validMoves;
+        int countup = 0;
 
         public GraphPlayingfield(Texture2D otelloTileTex)
         {
@@ -45,8 +48,10 @@ namespace Otello
             startingPositions.Add(new Vector2(4, 4));
 
             currentFlipQueue = new Queue<NodeOtelloPiece>();
+
+            validMoves = new List<NodeOtelloPiece>();
             //biggestFlipQueue = new Queue<NodeOtelloPiece>();
-            allNodeFlipQueues = new Queue<NodeOtelloPiece>[gridLength];    
+            //allNodeFlipQueues = new Queue<NodeOtelloPiece>[gridLength];    
         }
 
         /// <summary>
@@ -68,8 +73,8 @@ namespace Otello
         /// Gets called by the players (agent/ human) and then places the tile with the correct color 
         /// where the human pressed or where the agent chose. 
         /// </summary>
-        /// <param name="mouseX">Coordinate for the mouse x position</param>
-        /// <param name="posY">Coordinate for the mouse y position</param>
+        /// <param name="mouseX">Coordinate for the mouse x Position</param>
+        /// <param name="posY">Coordinate for the mouse y Position</param>
         /// <param name="playerColor">Which player placed it</param>
         /// <returns></returns>
         public void PlaceTile(int posX, int posY, Color playerColor)
@@ -314,12 +319,11 @@ namespace Otello
         } 
 
         /// <summary>
-        /// Goes through the whole graph/ playingfield and finds placeable positions which has a neighbor next to the opponents color. 
+        /// Goes through the whole graph/ playingfield and finds placeable Positions which has a neighbor next to the opponents color. 
         /// </summary>
         /// <returns></returns>
-       public NodeOtelloPiece[] GetEmptyTiles()
+       public void GetEmptyTiles() //call this one before SetNodeVAlue
        {
-            List<NodeOtelloPiece> returnNodes = new List<NodeOtelloPiece>();
             for (int y = 0; y < gridLength; y++)
             {
                 for (int x = 0; x < gridLength; x++)
@@ -329,12 +333,78 @@ namespace Otello
                         //graph[x, y]. //om denna har grannar som inte har samma färg gör rekursiv kall på grannen tills det inte går eller en tom plats hittats
                         if (graph[x, y].HasValidNeighbor())
                         {
-                            returnNodes.Add(graph[x, y]);
+                            validMoves.Add(graph[x, y]);
                         }                    
                     }
                 }
             }
-            return returnNodes.ToArray();
        }
+
+        /// <summary>
+        /// First it finds the directon by looking at the diff in the positions from the PlaceableNode and one of the neighbors, 
+        /// then it calls the method that finds the neighbors based on the placableNode and the "dir" (the directon we just found).
+        /// </summary>
+        private void SetNodeValue() //atm it only sets the directon but it's suppose to call a metod that then uses the placeable and directon to find if the neigbors dir is valid the  sets the highset val as the placeables value
+       {        
+            for (int i = 0; i < validMoves.Capacity; i++) //all playable moves (within the normal rules)
+            {
+                for (int j = 0; j < validMoves[i].Neighbors.Count; j++) //all neighbors of the current valid move
+                {
+                    //set direcon based on diff on pos
+                    int x = 0;
+                    int y = 0;
+
+                    if (validMoves[i].Position.X > validMoves[i].Neighbors.ToArray()[j].Position.X)
+                    {
+                        x = 1;
+                    }
+                    else if (validMoves[i].Position.X < validMoves[i].Neighbors.ToArray()[j].Position.X)
+                    {
+                        x = -1;
+                    }
+                   
+                    if (validMoves[i].Position.Y > validMoves[i].Neighbors.ToArray()[j].Position.Y)
+                    {
+                        y = 1;
+                    }
+                    else if (validMoves[i].Position.Y < validMoves[i].Neighbors.ToArray()[j].Position.Y)
+                    {
+                        y = -1;
+                    }
+                    
+                    Vector2 dir = new Vector2(x, y);
+
+                    FindNodeValue(validMoves[i], dir);
+                }
+            }
+       }
+        /// <summary>
+        /// /irst takes in the placeable we're checking and dir then by using the positon of both i can iterate in the right direction using 
+        /// the information from the previous method 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="directon"></param>
+        private void FindNodeValue(NodeOtelloPiece node, Vector2 directon) 
+        {
+             
+            if ((node.Position.X + directon.X) < gridLength && (node.Position.X + directon.X) <= 0 && (node.Position.Y + directon.Y) < gridLength && (node.Position.Y + directon.Y) <= 0) // så länge de är innanför planen go ahead
+            { 
+                if (graph[(int)(node.Position.X + directon.X), (int)(node.Position.Y + directon.Y)].EmptyTile) //if neigbor of certain dir is not empty
+                {
+                    if (graph[(int)(node.Position.X + directon.X), (int)(node.Position.Y + directon.Y)].NodeColor != node.NodeColor) //if the neighbor we're checking is not of the same color
+                    {
+                        countup++; //bara så att vi kan kolla att det faktiskt går att få dessa poängen
+                        FindNodeValue(graph[(int)(node.Position.X + directon.X), (int)(node.Position.Y + directon.Y)], directon); //skicka in nästa nod och steg 
+                        //kan behöva en brake här då jag inte är säker på att rekursionen är enough
+                    }
+
+                    if(graph[(int)(node.Position.X + directon.X), (int)(node.Position.Y + directon.Y)].NodeColor == node.NodeColor && countup > 0)
+                    {
+                        node.FlipScore = countup;
+                    }                    
+                }
+            }
+            countup = 0; // reset för next nod
+        }
     }
 }

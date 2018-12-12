@@ -11,7 +11,7 @@ namespace Otello
     {
         private int maxEval, minEval;
         private NodeOtelloPiece evalNode, maxEvalNode;
-        private NodeOtelloPiece[] placeableNodes;
+        //private NodeOtelloPiece[] placeableNodes;
 
 
         public Agent(GraphPlayingfield playingField)
@@ -45,17 +45,34 @@ namespace Otello
         public override Color GetColor()
         {
             return myColor;
-        }
+        }      
 
-       
-        public void SetPlaceables()
-        {
-           placeableNodes = playingField.GetEmptyTiles();
+        //private void SetHighestFlipValue(NodeOtelloPiece[] placeableNodes) //skica
+        //{
+        //    for (int i = 0; i < placeableNodes.Length; i++) //går igenom alla pacerbara platser
+        //    {
 
-            
-        }
-
-
+        //        for (int j = 0; j < placeableNodes[i].Neighbors.Count; j++) //går igenom den placerbara nodens grannar kollar viability 
+        //        {
+        //            if (!placeableNodes[i].Neighbors.ToArray()[i].EmptyTile) //om grannarna till den placerbara noden inte är tomma (för de är fortfarande grannar även om de inte håller en tile)
+        //            {
+        //                if (placeableNodes[i].Neighbors.ToArray()[j].NodeColor != myColor) //om grannen inte har samma färg
+        //                {
+        //                    //behöver kolla den direction som hittades och adda poängen 
+        //                    Vector2 dir = new Vector2(placeableNodes[i].Position.X - placeableNodes[i].Neighbors.ToArray()[j].Position.X, )
+        //                    placeableNodes[i].FlipScore++;
+        //                }
+        //            }
+        //            else if (placeableNodes[i].Neighbors.ToArray()[j].NodeColor == myColor && placeableNodes[i].FlipScore > 0) // kanske inte behöver kolla flipscoren här då 
+        //            {
+        //                //if a node of my color is found and if the score is higher than 0 then this is a valid move the val will be positiv but if the color of the node is 
+        //                //opposite then the flipvalue will be "negative" in the min max. This is because the smaller values will be "prioretised" by the agent as the players 
+        //                //best moves
+        //            }
+        //        }
+        //    }
+           
+        //}
 
         private NodeOtelloPiece MiniMax(NodeOtelloPiece node, int depth, bool isAgent)
         {
